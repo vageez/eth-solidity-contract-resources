@@ -6,6 +6,7 @@ pragma solidity 0.7.5;
 
 /**
 * Can also import Parent contract like so.
+* When deploying a contract which inherits from another contract, a SINGLE contract is deployed to the block chain. 
 * import "./Ownable.sol"
 **/
 
