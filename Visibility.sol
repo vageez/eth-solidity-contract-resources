@@ -4,6 +4,7 @@ pragma solidity 0.7.5;
  * Visibility
  * 
  * Public: Anyone can execute the function, or access our variable.
+ * When defining a PUBLIC Variable, a Getter function AUTOMATICALLY created to fetch the variable. 
  * 
  * Private: Who can execute or access the fcuntion; Can only be executed from within the contract itself
  * 
