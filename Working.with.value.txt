@@ -1,0 +1,12 @@
+
+// Get value
+function contractSum() public view returns (uint) {
+    return address(this).balance;
+}
+
+// define a function that accepts value; payable
+function addTransaction(address _to, address _from, uint _amount) external payable {
+    transactionLog.push(Transaction(_to, _from, _amount, transactionLog.length));
+}
+// Send value to a contract
+governmentInstance.addTransaction{value: 1 ether}(msg.sender, recipient, amount);
