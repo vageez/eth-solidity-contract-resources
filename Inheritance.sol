@@ -2,6 +2,7 @@ pragma solidity 0.7.5;
 
 /**
 * Inheritance
+* https://medium.com/coinmonks/solidity-and-object-oriented-programming-oop-191f8deb8316
 **/
 
 /**
