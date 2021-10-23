@@ -13,11 +13,12 @@ contract {
     // storage -> local REFERENCE
     
     function f(uint[] memory memoryArray) { // [1,2,3,4]
-        storageArray = memoryArray; // memory -> memory COPY
+        // ASSIGN BY COPY
+        storageArray = memoryArray;
         
-        uint[] storage pointerArray = storageArray; // memory -> local REFERENCE
-        
-        pointerArray.push(7); // push into storageArray
+        uint[] storage pointerArray = storageArray; 
+        // pointerArray will point to starageArray
+        // updating one will update the other
         
         memoryArray = pointerArray; // local => memory COPY
         
