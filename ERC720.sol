@@ -8,7 +8,7 @@ contract Kittycontract {
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 
     event Birth(
-        address owner, 
+        address owner,
         uint256 kittenId, 
         uint256 mumId, 
         uint256 dadId, 
@@ -22,11 +22,15 @@ contract Kittycontract {
         uint32 dadId;
         uint16 generation;
     }
-
+    
     Kitty[] kitties;
 
     mapping (uint256 => address) public kittyIndexToOwner;
+    
     mapping (address => uint256) ownershipTokenCount;
+    
+    mapping (address => uint256[]) ownerToCats;
+
 
     
 
@@ -43,7 +47,7 @@ contract Kittycontract {
         return kittyIndexToOwner[_tokenId];
     }
 
-    function transfer(address _to,uint256 _tokenId) external
+    function transfer(address _to, uint256 _tokenId) external
     {
         require(_to != address(0));
         require(_to != address(this));
@@ -53,15 +57,7 @@ contract Kittycontract {
     }
     
     function getAllCatsFor(address _owner) external view returns (uint[] memory cats){
-        uint[] memory result = new uint[](ownershipTokenCount[_owner]);
-        uint counter = 0;
-        for (uint i = 0; i < kitties.length; i++) {
-            if (kittyIndexToOwner[i] == _owner) {
-                result[counter] = i;
-                counter++;
-            }
-        }
-        return result;
+        return ownerToCats[_owner];
     }
     
     function createKittyGen0(uint256 _genes) public returns (uint256) {
@@ -99,17 +95,29 @@ contract Kittycontract {
         ownershipTokenCount[_to]++;
 
         kittyIndexToOwner[_tokenId] = _to;
+        ownerToCats[_to].push(_tokenId);
 
         if (_from != address(0)) {
             ownershipTokenCount[_from]--;
+            _removeTokenIdFromOwner(_from, _tokenId);
         }
 
         // Emit the transfer event.
         emit Transfer(_from, _to, _tokenId);
     }
+    
+    function _removeTokenIdFromOwner(address _owner, uint256 _tokenId) internal {
+        uint256 lastId = ownerToCats[_owner][ownerToCats[_owner].length-1];
+        for (uint i = 0; i < ownerToCats[_owner].length; i++) {
+            if (ownerToCats[_owner][i] == _tokenId) {
+                ownerToCats[_owner][i] = lastId;
+                ownerToCats[_owner].pop();
+            }
+        }
+    }
 
     function _owns(address _claimant, uint256 _tokenId) internal view returns (bool) {
-      return kittyIndexToOwner[_tokenId] == _claimant;
-  }
+        return kittyIndexToOwner[_tokenId] == _claimant;
+    }
 
 }
